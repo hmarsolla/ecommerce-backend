@@ -3,18 +3,18 @@ import jwt from 'jsonwebtoken';
 
 import config from '../../../config';
 import HTTPError from './../../helpers/httpError';
-import { IUser, UserModel } from '../../models/user';
+import { IUser, User } from '../../models/user';
 
 export default class AuthService {
 
     async createUser(username: string, password: string): Promise<IUser> {
         const hashedPassword = bcrypt.hashSync(password, 8);
-        const user = new UserModel({ username, password: hashedPassword, roles: ['user'] });
+        const user = new User({ username, password: hashedPassword, roles: ['user'] });
         return await user.save();
       };
 
     async login(username: string, password: string) {
-        const userFound = await UserModel.findOne({username}).exec();
+        const userFound = await User.findOne({username}).exec();
         if (!userFound) throw new HTTPError(404, 'User not found');
         
         const passwordIsValid = bcrypt.compareSync(password, userFound.password);
