@@ -17,7 +17,7 @@ export default function CartRouter(cartService: CartService) {
         }
     });
 
-    router.post('/add', async (req, res) => {
+    router.post('/add', verifyToken, async (req, res) => {
         const { productId, quantity } = req.body;
         try {
             const cart = await cartService.addToCart(req.body.credential.id, productId, quantity);
@@ -30,7 +30,7 @@ export default function CartRouter(cartService: CartService) {
         }
     });
 
-    router.delete('/remove/:productId', async (req, res) => {
+    router.delete('/remove/:productId', verifyToken, async (req, res) => {
         const { productId } = req.params;
         try {
             const cart = await cartService.removeFromCart(req.body.credential.id, productId);
@@ -43,7 +43,7 @@ export default function CartRouter(cartService: CartService) {
         }
     });
 
-    router.delete('/clear', async (req, res) => {
+    router.delete('/clear', verifyToken, async (req, res) => {
         try {
             const cart = await cartService.clearCart(req.body.credential.id);
             if (!cart) {
