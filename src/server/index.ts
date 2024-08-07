@@ -6,6 +6,7 @@ import helmet from 'helmet';
 
 import Router from './router';
 import errorHandler from './middleware/error';
+import { setupSwagger } from './../swagger';
 
 export default class HTTPServer {
     app: express.Application;
@@ -24,6 +25,7 @@ export default class HTTPServer {
 		this.app.use('/api/v1/', Router());
         
 		this.app.use(errorHandler);
+		setupSwagger(this.app);
 	}
 
 	async listen(host: string, port: number) {

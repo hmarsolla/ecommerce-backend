@@ -7,8 +7,13 @@ import { IUser, User } from '../../models/user';
 
 export default class AuthService {
 
-    async createAdmin(adminUsername: string, adminPassword: string) {
-        await this.createUser(adminUsername, adminPassword, ['user', 'admin']);
+    async createAdmin(username: string, password: string) {
+        const userFound = await User.findOne({username}).exec();
+        if (userFound) return;
+
+        const hashedPassword = bcrypt.hashSync(password, 8);
+        const user = new User({ username, password: hashedPassword, roles: ['user', 'admin'] });
+        return await user.save();
     }
 
     async createUser(username: string, password: string, roles: string[] = ['user']): Promise<IUser> {

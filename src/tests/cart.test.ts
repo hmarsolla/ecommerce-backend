@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import request from 'supertest';
-import HTTPServer from '../src/server/index';
+import HTTPServer from '../server/index';
 import { Application } from 'express';
 import bcrypt from 'bcryptjs';
-import { User } from '../src/server/models/user';
+import { User } from '../server/models/user';
 
 let app: Application;
 
