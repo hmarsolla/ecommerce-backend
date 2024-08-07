@@ -35,7 +35,7 @@ export default function AuthRouter(authService: AuthService) {
 	 * @swagger
 	 * /auth/register/:
 	 *   post:
-	 *     summary: Register a new User
+	 *     summary: Register a new user
 	 *     tags: [User]
 	 *     requestBody:
 	 *       required: true
@@ -79,7 +79,7 @@ export default function AuthRouter(authService: AuthService) {
 	 * @swagger
 	 * /auth/adm/register/:
 	 *   post:
-	 *     summary: Register a new Admin User
+	 *     summary: Register a new admin user
 	 *     tags: [User]
 	 *     parameters:
 	 *       - in: header
