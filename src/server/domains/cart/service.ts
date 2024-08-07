@@ -3,19 +3,14 @@ import { Cart, ICart } from './../../models/cart';
 
 export default class CartService {
     async getCartByUserId(userId: string): Promise<ICart | null> {
-        return await Cart.findOne({ user: new Types.ObjectId(userId) }).populate('items.product').exec();
-    };
-
-    async createCart(userId: string): Promise<ICart> {
-        let cartFound = await Cart.findOne({ user: new Types.ObjectId(userId) });
+        const cartFound = await Cart.findOne({ user: new Types.ObjectId(userId) }).populate('items.product').exec();
         if (cartFound) return cartFound;
         const cart = new Cart({ user: new Types.ObjectId(userId), items: [] });
         return await cart.save();
     };
 
     async addToCart(userId: string, productId: string, quantity: number): Promise<ICart | null> {
-        await this.createCart(userId);
-        let cart = await Cart.findOne({ user: new Types.ObjectId(userId) });
+        let cart = await this.getCartByUserId(userId);
         if (!cart) {
             return null;
         }
@@ -29,16 +24,16 @@ export default class CartService {
     };
 
     async removeFromCart(userId: string, productId: string): Promise<ICart | null> {
-        const cart = await Cart.findOne({ user: userId });
+        let cart = await this.getCartByUserId(userId);
         if (!cart) {
             return null;
-        }
-        cart.items = cart.items.filter(item => item.product.toString() !== productId);
+        }       
+        cart.items = cart.items.filter(item => item.product.id !== productId);
         return await cart.save();
     };
 
     async clearCart(userId: string): Promise<ICart | null> {
-        const cart = await Cart.findOne({ user: userId });
+        let cart = await this.getCartByUserId(userId);
         if (!cart) {
             return null;
         }

@@ -52,7 +52,7 @@ export default function ProductRouter(productService: ProductService) {
             if (!product) {
                 return res.status(404).send({ message: 'Product not found' });
             }
-            res.status(200).send({ message: 'Product deleted successfully' });
+            res.status(204).send({ message: 'Product deleted successfully' });
         } catch (error) {
             res.status(500).send({ message: 'Error deleting product', error });
         }

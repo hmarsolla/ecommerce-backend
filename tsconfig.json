@@ -10,8 +10,9 @@
         "strict": true,
         "skipLibCheck": true,
         "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true
-      },
-      "include": ["src/**/*"],
-      "exclude": ["node_modules", "dist"]
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": ["./node_modules/@types", "./src/types"]
+    },
+    "include": ["src/**/*.ts", "tests/**/*.ts"],
+    "exclude": ["node_modules"]
 }

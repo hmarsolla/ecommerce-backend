@@ -1,10 +1,10 @@
-import statuses from 'statuses';
-
 export default class HTTPError extends Error {
-    status: number;
-	constructor(status = 503, message: string) {
-		if (!message) message = status + ' - ' + statuses(status);
-		super(message);
-		this.status = status;
+	statusCode: number;
+  
+	constructor(statusCode: number, message: string) {
+	  super(message);
+	  this.statusCode = statusCode;
+	  this.name = this.constructor.name;
+	  Error.captureStackTrace(this, this.constructor);
 	}
-}
+  }

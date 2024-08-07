@@ -16,7 +16,7 @@ export default function Router() {
     const router = express.Router();
 
     router.use('/auth', AuthRouter(authService));
-    router.use('/product', ProductRouter(productService));
+    router.use('/products', ProductRouter(productService));
     router.use('/cart', CartRouter(cartService));
 
     router.get('/', (req, res) => {

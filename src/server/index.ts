@@ -5,7 +5,7 @@ import express from 'express';
 import helmet from 'helmet';
 
 import Router from './router';
-import error from './middleware/error';
+import errorHandler from './middleware/error';
 
 export default class HTTPServer {
     app: express.Application;
@@ -23,7 +23,7 @@ export default class HTTPServer {
         
 		this.app.use('/api/v1/', Router());
         
-		this.app.use(error);
+		this.app.use(errorHandler);
 	}
 
 	async listen(host: string, port: number) {
