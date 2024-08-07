@@ -2,17 +2,27 @@ import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import request from 'supertest';
 import HTTPServer from '../src/server/index';
+import { Application } from 'express';
+import bcrypt from 'bcryptjs';
+import { User } from '../src/server/models/user';
 
-const app = new HTTPServer().app;
+let app: Application;
 
 let mongoServer: MongoMemoryServer;
 let userToken: string;
+let adminToken: string;
 let productId: string;
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
   await mongoose.connect(uri);
+
+  app  = new HTTPServer().app;
+
+  const hashedPassword = bcrypt.hashSync('apiadm', 8);
+  const user = new User({ username: 'admin', password: hashedPassword, roles: ['user', 'admin'] });
+  await user.save();
 
   // Create a user and get the token
   await request(app)
@@ -31,9 +41,19 @@ beforeAll(async () => {
     });
   userToken = userLogin.body.token;
 
+    // Get the admin token
+    const adminLogin = await request(app)
+    .post('/api/v1/auth/login')
+    .send({
+      username: 'admin',
+      password: 'apiadm'
+    });
+  adminToken = adminLogin.body.token;
+
   // Create a product
   const productRes = await request(app)
     .post('/api/v1/products')
+    .set('x-access-token', adminToken)
     .send({
       name: 'Test Product',
       description: 'This is a test product',
